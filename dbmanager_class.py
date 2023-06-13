@@ -40,7 +40,11 @@ class DBManager:
 
     def get_vacancies_with_higher_salary(self):
         # получает список всех вакансий, у которых зарплата выше средней по всем вакансиям.
-        pass
+
+        self.cur.execute(f"Select vacancy_name, salary_to FROM headhunter)\n"
+                         f"WHERE salary_to>(SELECT AVG(salary_to) FROM headhunter ")
+        results = self.cur.fetchall()
+        return results
 
     def get_vacancies_with_keyword(self, keyword):
         # получает список всех вакансий, в названии которых содержатся переданные в метод слова, например “python"
