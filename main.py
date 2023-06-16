@@ -14,9 +14,18 @@ def main():
         user='postgres',
         password='123'
     )
-    cur = conn.cursor()
-
-    for item in data: # формирование данных и заполнение таблицы
+    cur = conn.cursor()  # создание таблицы в БД
+    cur.execute("""CREATE TABLE IF NOT EXISTS headhunter(vacancy_id int PRIMARY KEY,
+                vacancy_name varchar,
+                url varchar,
+                salary_to int,
+                salary_from int ,
+                employer_id int ,
+                employer_name varchar,
+                requirement text,
+                responsibility text);
+                """)
+    for item in data:  # формирование данных и заполнение таблицы
         if item["employer"]["name"] in employs:
             vacancy_id = item["id"],
             vacancy_name = item["name"],
