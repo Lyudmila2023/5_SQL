@@ -1,14 +1,14 @@
 import psycopg2
 from utils import get_request, json_data_read, get_employers_list, get_salary
+from dbmanager_class import DBManager
 
 
 def main():
     get_request()
     data = json_data_read()
     employs = get_employers_list(data)
-    # print(employs)
 
-    conn = psycopg2.connect( # подключение к БД
+    conn = psycopg2.connect(  # подключение к БД
         host='localhost',
         database='headhunter',
         user='postgres',
@@ -46,6 +46,31 @@ def main():
                                                                                        requirement,
                                                                                        responsibility))
     conn.commit()
+    data = DBManager()
+    while True:
+        user_input = input("Выберете действие:\n"
+                           "1 - получает список всех компаний и количество вакансий у каждой компании\n"
+                           "2 -получает список всех вакансий с указанием названия компании, названия вакансии и зарплаты и ссылки на вакансию\n"
+                           "3- получает среднюю зарплату по вакансиям.\n"
+                           "4-получает список всех вакансий, у которых зарплата выше средней по всем вакансиям\n"
+                           "5-получает список всех вакансий, в названии которых содержатся переданные в метод слова, например 'Диспетчер'\n"
+                           "выход - выйти из программы\n")
+        if user_input == "1":
+            print(data.get_companies_and_vacancies_count())
+        elif user_input == "2":
+            print(data.get_all_vacancies())
+        elif user_input == "3":
+            print(data.get_avg_salary())
+        elif user_input == "4":
+            print(data.get_vacancies_with_higher_salary())
+        elif user_input == "5":
+            word = input("Введите слово: ")
+            print(data.get_vacancies_with_keyword(word))
+        elif user_input == "выход":
+            break
+        else:
+            print("Нет такого значения")
+            continue
 
     cur.close()
     conn.close()
